@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "allowJs": true,
+        "sourceMap": true,
+        "removeComments": true,
+        "noEmitOnError": true,
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+    },
+    "include": ["src/**/*",  "index.d.ts"],
+    "exclude": ["node_modules", "**/*.spec.ts", "dist", "jest.config.js"]
+}
