@@ -1,0 +1,114 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+}
+
+:focus,
+:active {
+    outline: none;
+}
+
+a:focus,
+a:active {
+    outline: none;
+}
+
+a,
+a:hover,
+a:visited,
+a:focus {
+    text-decoration: none;
+}
+
+nav,
+footer,
+header {
+    display: block;
+}
+
+ul li {
+    list-style: none;
+}
+
+img {
+    vertical-align: top;
+    max-width: 100%;
+    display: block;
+}
+
+button::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    min-height: 100%;
+    max-width: 100%;
+}
+
+body {
+    background-color: lightsteelblue;
+    position: relative;
+    font-size: 14px;
+}
+
+.wrapper {
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.game {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    width: calc(100% - 5px);
+    border-radius: 5px;
+}
+
+.editor {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 350px;
+    height: 70vh;
+    background-color: coral;
+}
+
+.viewer {
+    position: relative;
+    width: 350px;
+    height: 70vh;
+    background-color: coral;
+}
+
+.tooltip {
+    background-color: lightcyan;
+    position: absolute;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+}

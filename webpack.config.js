@@ -21,6 +21,13 @@ module.exports = {
         watchFiles: ['./src/*'],
         open: true,
         hot: true,
+        client: {
+            overlay: {
+                errors: true,
+                warnings: false,
+            },
+            progress: true,
+        },
     },
     entry: './src/index.ts',
     output: {
