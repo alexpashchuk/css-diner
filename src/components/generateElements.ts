@@ -2,13 +2,30 @@ import { Classes, Tags } from '../interface/enums';
 
 export default class GenerateElements {
     createBlock = (tagName: Tags, className?: Classes[] | Classes, ...arg: HTMLElement[]): HTMLElement => {
-        const element = document.createElement(tagName);
+        const block = document.createElement(tagName);
         if (Array.isArray(className)) {
-            element.classList.add(...className);
+            block.classList.add(...className);
         } else if (typeof className === 'string') {
-            element.classList.add(className);
+            block.classList.add(className);
         }
-        element.append(...arg);
+        block.append(...arg);
+        return block;
+    };
+
+    createHeaderElement = (tagName: Tags, className: Classes[], title: string, description: string): HTMLElement => {
+        const headerEditor = document.createElement(tagName);
+        headerEditor.classList.add(`${className}__header`);
+        headerEditor.append(
+            this.createElement(tagName, [`${className}__header_item`], title),
+            this.createElement(tagName, [`${className}__header_item`], description)
+        );
+        return headerEditor;
+    };
+
+    createElement = (tagName: Tags, className: string[], text?: string): HTMLElement => {
+        const element = document.createElement(tagName);
+        element.classList.add(...className);
+        element.innerHTML = text || '';
         return element;
     };
 

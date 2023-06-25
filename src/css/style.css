@@ -108,7 +108,9 @@ body {
 .tooltip {
     background-color: lightcyan;
     position: absolute;
+    display: none;
     text-align: center;
     padding: 10px;
     border-radius: 5px;
+    font-family: monospace;
 }
