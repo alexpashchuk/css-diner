@@ -1,7 +1,26 @@
 import { Classes, Tags } from '../interface/enums';
 
-export default class GenerateElements {
-    createBlock = (tagName: Tags, className?: Classes[] | Classes, ...arg: HTMLElement[]): HTMLElement => {
+export default class CreateElements {
+    levelHeader = document.createElement(Tags.DIV);
+
+    rootLevel = document.createElement(Tags.DIV);
+
+    rootMenu = document.createElement(Tags.DIV);
+
+    levelNumber = document.createElement(Tags.SPAN);
+
+    listMenu = document.createElement(Tags.UL);
+
+    rootHelp = document.createElement(Tags.DIV);
+
+    input = document.createElement(Tags.INPUT);
+
+    table = document.createElement(Tags.SECTION);
+
+    htmlCode = document.createElement(Tags.DIV);
+
+    formEditor = document.createElement(Tags.FORM);
+    createBlock = (tagName: Tags, className?: Classes[] | Classes | string[], ...arg: HTMLElement[]): HTMLElement => {
         const block = document.createElement(tagName);
         if (Array.isArray(className)) {
             block.classList.add(...className);
@@ -30,17 +49,13 @@ export default class GenerateElements {
     };
 
     createButton = (
+        className: string[],
         type: 'button' | 'submit' | 'reset',
         functions: () => void,
-        text?: string,
-        className?: Classes[] | Classes
+        text: string
     ): HTMLButtonElement => {
         const button = document.createElement(Tags.BUTTON);
-        if (Array.isArray(className)) {
-            button.classList.add(...className);
-        } else if (typeof className === 'string') {
-            button.classList.add(className);
-        }
+        button.classList.add(...className);
         button.innerHTML = text || '';
         button.type = type;
         button.addEventListener('click', functions);

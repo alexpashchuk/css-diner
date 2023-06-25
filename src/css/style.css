@@ -53,6 +53,15 @@ img {
     display: block;
 }
 
+button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
 button::-moz-focus-inner {
     padding: 0;
     border: 0;
@@ -65,7 +74,7 @@ html {
 }
 
 body {
-    background-color: lightsteelblue;
+    background-color: lightslategray;
     position: relative;
     font-size: 14px;
 }
@@ -113,4 +122,94 @@ body {
     padding: 10px;
     border-radius: 5px;
     font-family: monospace;
+}
+
+.bold {
+    font-weight: 900;
+    color: black;
+}
+
+.check-mark {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    transform: scale(1.5);
+    width: 22px;
+    height: 22px;
+    border: 2px solid transparent;
+    border-radius: 100px;
+}
+
+.check-mark::after {
+    content: '';
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    left: 3px;
+    top: -1px;
+    width: 6px;
+    height: 10px;
+    border-width: 0 2px 2px 0;
+    border-style: solid;
+    border-color: white;
+    transform-origin: bottom left;
+    transform: rotate(45deg);
+}
+
+.check-mark.passed::after {
+    border-color: greenyellow;
+}
+
+.check-mark.not-passed::after {
+    border-color: palevioletred;
+}
+
+.button-prev {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    transform: scale(1.2);
+    width: 22px;
+    height: 22px;
+    border: 2px solid transparent;
+    border-radius: 100px;
+}
+
+.button-prev::after {
+    content: '';
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-bottom: 2px solid white;
+    border-left: 2px solid white;
+    transform: rotate(45deg);
+    left: 6px;
+    top: 4px;
+}
+
+.button-next {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    transform: scale(1.2);
+    width: 22px;
+    height: 22px;
+    border: 2px solid transparent;
+    border-radius: 100px;
+}
+
+.button-next::after {
+    content: '';
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-bottom: 2px solid white;
+    border-right: 2px solid white;
+    transform: rotate(-45deg);
+    right: 6px;
+    top: 4px;
 }
