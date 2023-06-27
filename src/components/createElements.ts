@@ -33,10 +33,10 @@ export default class CreateElements {
 
     createHeaderElement = (tagName: Tags, className: Classes[], title: string, description: string): HTMLElement => {
         const headerEditor = document.createElement(tagName);
-        headerEditor.classList.add(`${className}__header`);
+        headerEditor.classList.add(`${className}-header`);
         headerEditor.append(
-            this.createElement(tagName, [`${className}__header_item`], title),
-            this.createElement(tagName, [`${className}__header_item`], description)
+            this.createElement(tagName, [`${className}-item`], title),
+            this.createElement(tagName, [`${className}-item`], description)
         );
         return headerEditor;
     };
@@ -52,13 +52,15 @@ export default class CreateElements {
         className: string[],
         type: 'button' | 'submit' | 'reset',
         functions: () => void,
-        text: string
+        text: string,
+        ...arg: HTMLElement[]
     ): HTMLButtonElement => {
         const button = document.createElement(Tags.BUTTON);
         button.classList.add(...className);
         button.innerHTML = text || '';
         button.type = type;
         button.addEventListener('click', functions);
+        button.append(...arg);
         return button;
     };
 }

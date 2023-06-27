@@ -17,7 +17,18 @@ class CreateLevel extends CreateElements {
         this.levelNumber.classList.add('level-title');
         this.levelNumber.textContent = `Level ${this.levelActive + 1} of ${levels.length}`;
 
-        this.levelHeader.append(this.createButton([Classes.BUTTON_MENU], 'button', this.toggleMenu, 'menu'));
+        // this.levelHeader.append(
+        //     this.createBlock(Tags.DIV, ['burger'], this.createButton([Classes.BUTTON_MENU], 'button', this.toggleMenu))
+        // );
+        this.levelHeader.append(
+            this.createButton(
+                [Classes.BUTTON_MENU],
+                'button',
+                this.toggleMenu,
+                '',
+                this.createElement(Tags.DIV, ['burger'])
+            )
+        );
         this.levelHeader.append(this.levelNumber);
         this.levelHeader.append(this.createElement(Tags.SPAN, ['check-mark', 'check']));
         this.levelHeader.append(this.createButton([Classes.BUTTON_PREV], 'button', this.showPrevLevel));
@@ -33,7 +44,7 @@ class CreateLevel extends CreateElements {
         for (let i = 0; i < levels.length; i += 1) {
             const item = document.createElement('li');
             item.classList.add('list-item');
-            item.classList.add(this.levelActive + 1 === i + 1 ? 'list-item_active' : 'list-item');
+            item.classList.add(this.levelActive + 1 === i + 1 ? 'list-active' : 'list-item');
             item.id = (i + 1).toString();
             item.innerHTML = `<span class="check-mark" aria-hidden="true"></span>
             <span class="list-text">${i + 1}.${levels[i].syntax}</span>`;
@@ -53,18 +64,26 @@ class CreateLevel extends CreateElements {
         this.rootHelp.innerHTML = '';
         this.rootHelp.classList.add('level-help');
         this.rootHelp.append(
-            this.createElement(Tags.H3, ['selector-name'], levels[this.levelActive].selectorName),
-            this.createElement(Tags.H2, ['title'], levels[this.levelActive].helpTitle),
+            this.createElement(Tags.H2, ['selector-name'], levels[this.levelActive].selectorName),
+            this.createElement(Tags.H3, ['title'], levels[this.levelActive].helpTitle),
             this.createElement(Tags.H2, ['syntax'], levels[this.levelActive].syntax),
-            this.createElement(Tags.P, ['description'], levels[this.levelActive].help)
+            this.createElement(Tags.P, ['description'], levels[this.levelActive].help),
+            this.createButton(['reset'], 'button', this.reset, 'RESET')
         );
         if (levels[this.levelActive].examples) {
+            this.rootHelp.append(this.createElement(Tags.H3, ['examples'], 'Examples'));
             levels[this.levelActive].examples?.forEach((el) =>
                 this.rootHelp.append(this.createElement(Tags.DIV, ['example'], el))
             );
         }
 
         return this.rootHelp;
+    };
+
+    reset = (): void => {
+        this.levelActive = 0;
+        localStorage.clear();
+        this.getNewLevel();
     };
 
     showNextLevel = (): void => {
@@ -82,10 +101,10 @@ class CreateLevel extends CreateElements {
     };
 
     toggleMenu = (): void => {
-        this.isMenuActive = !this.isMenuActive;
-        this.rootMenu.style.left = this.isMenuActive ? '0px' : `-${this.rootMenu.offsetWidth}px`;
-        const elem = document.querySelector('.button-menu') as HTMLElement;
-        elem.textContent = this.isMenuActive ? 'close' : 'menu';
+        const burgerLevel = document.querySelector('.button-menu') as HTMLElement;
+        const menuLevel = document.querySelector('.level-menu') as HTMLElement;
+        burgerLevel.classList.toggle('open');
+        menuLevel.classList.toggle('open');
     };
 
     toggleListActives = (): void => {
@@ -101,8 +120,8 @@ class CreateLevel extends CreateElements {
             this.levelHeader.children[2].classList.add('not-passed');
         }
         this.listMenu.childNodes.forEach((item: any, i: number) => {
-            item.classList.remove('mdc-list-item--activated');
-            if (+item.id === this.levelActive + 1) item.classList.add('mdc-list-item--activated');
+            item.classList.remove('list-active');
+            if (+item.id === this.levelActive + 1) item.classList.add('list-active');
             if (objProgress[`${i}`]) {
                 item.children[0].classList.remove('not-passed', 'passed');
                 if (objProgress[`${i}`].correct && !objProgress[`${i}`].incorrect) {
@@ -127,7 +146,7 @@ class CreateLevel extends CreateElements {
         elem.innerHTML = levels[this.levelActive].doThis;
         this.table.querySelectorAll('*').forEach((item: Element) => {
             if (item.closest(levels[this.levelActive].selector)) {
-                item.closest(`${levels[this.levelActive].selector}`)?.classList.add('selected-element');
+                item.closest(`${levels[this.levelActive].selector}`)?.classList.add('selected');
             }
         });
         this.rootLevel.removeChild(this.rootHelp);
@@ -140,7 +159,7 @@ class CreateLevel extends CreateElements {
         const childClass = child.attributes.class;
         const childId = child.attributes.getNamedItem('id');
         const attributes = `${
-            childClass && childClass.value && childClass && childClass.value !== 'selected-element'
+            childClass && childClass.value && childClass && childClass.value !== 'selected'
                 ? ` class="${childClass.value}"`
                 : ''
         }${childId && childId.value ? ` id="${childId.value}"` : ''}`;

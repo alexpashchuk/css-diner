@@ -11,7 +11,7 @@ export default class Game extends CreateLevel {
 
     createFormEditor = (): HTMLFormElement => {
         this.formEditor.classList.add(Classes.FORM);
-        this.input.classList.add(Classes.FORM_INPUT, Classes.STROBE);
+        this.input.classList.add(Classes.FORM_INPUT, Classes.BLINK);
         this.input.placeholder = Text.PLACEHOLDER;
         this.input.type = 'text';
         this.input.focus();
@@ -109,12 +109,12 @@ export default class Game extends CreateLevel {
             this.currentElem = e.target as HTMLElement;
             this.showTooltip(elementsTable[index]);
             elementsTable[index].classList.add('active');
-            elementsCode[index]?.classList.add('bold');
+            elementsCode[index]?.classList.add('backlight');
         }
         if (e.type === 'mouseout') {
             if (!this.currentElem) return;
             elementsTable[index].classList.remove('active');
-            elementsCode[index]?.classList.remove('bold');
+            elementsCode[index]?.classList.remove('backlight');
             this.currentElem = null;
             this.showTooltip(elementsTable[index]);
         }
@@ -144,7 +144,7 @@ export default class Game extends CreateLevel {
         this.table.innerHTML = levels[this.levelActive].boardMarkup;
         this.table.querySelectorAll('*').forEach((item: any) => {
             if (item.closest(levels[this.levelActive].selector)) {
-                item.closest(`${levels[this.levelActive].selector}`)?.classList.add('selected-element');
+                item.closest(`${levels[this.levelActive].selector}`)?.classList.add('selected');
             }
         });
         this.table.addEventListener('mouseover', (e: Event) => {
