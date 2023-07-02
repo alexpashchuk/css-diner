@@ -1,5 +1,4 @@
 enum Classes {
-    CONTAINER = 'container',
     WRAPPER = 'wrapper',
     LEVEL = 'level',
     PASSED = 'passed',
@@ -39,7 +38,6 @@ enum Classes {
     FORM_BUTTON = 'form-button',
     FORM_INPUT = 'form-input',
     FORM_HELP = 'form-help',
-    STROBE = 'strobe',
     BLINK = 'blink',
     SHAKE = 'shake',
     SELECTED = 'selected',
@@ -56,6 +54,12 @@ enum Classes {
     BACKLIGHT = 'backlight',
     ACTIVE = 'active',
     HIDDEN = 'hidden',
+    SCORE = 'score',
+    GAME_WIN = 'game-win',
+    CORRECT = 'correct',
+    INCORRECT = 'incorrect',
+    MISSED = 'missed',
+    TITLE_RESULTS = 'results',
 }
 
 enum Tags {
@@ -86,8 +90,13 @@ enum Text {
     HELP = 'HELP',
     GITHUB = 'github',
     LINK_GITHUB = 'https://github.com/alexpashchuk',
-    RS = '© RS-CSS 2023',
+    RS = '2023',
     LINK_RS = 'https://rs.school/js/',
+    YOU_WIN = 'YOU WIN',
+    CORRECT = 'correct',
+    INCORRECT = 'incorrect',
+    MISSED = 'missed',
+    RESULTS = 'Results:',
 }
 
 export { Classes, Tags, Text };

@@ -7,7 +7,7 @@
         "sourceMap": true,
         "removeComments": true,
         "noEmitOnError": true,
-//        "noImplicitAny": true,
+        "noImplicitAny": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
         "resolveJsonModule": true,

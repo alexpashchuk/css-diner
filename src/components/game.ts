@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 import CreateLevel from './createLevel';
 
 import { normalizeHtml } from '../utils/utils';
@@ -58,16 +56,15 @@ export default class Game extends CreateLevel {
 
         this.input.addEventListener('input', () => {
             return this.input.value.length === 0
-                ? this.input.classList.add(Classes.STROBE)
-                : this.input.classList.remove(Classes.STROBE);
+                ? this.input.classList.add(Classes.BLINK)
+                : this.input.classList.remove(Classes.BLINK);
         });
 
         return this.formEditor;
     };
 
     setLocalStorageProgress = (): void => {
-        // const progress = JSON.parse(localStorage.getItem('progress') || '') || {};
-        const progress = JSON.parse(localStorage.getItem('progress')) || {};
+        const progress = JSON.parse(localStorage.getItem('progress') || '{}') || {};
         const result =
             progress[`${this.levelActive}`] && progress[`${this.levelActive}`].correct
                 ? progress
@@ -76,7 +73,7 @@ export default class Game extends CreateLevel {
     };
 
     showAnswer = (): void => {
-        if (this.isPrintText) {
+        if (this.isPrintText && this.isGame) {
             this.isPrintText = false;
             const arrayResponseLetters: string[] = this.levels[this.levelActive].selector.split('');
             this.input.classList.remove(Classes.BLINK);
@@ -94,6 +91,7 @@ export default class Game extends CreateLevel {
     };
 
     showTooltip = (element: HTMLElement): void => {
+        if (!element) return;
         if (element.tagName) {
             const tooltipText = `&lt;${element.tagName.toLocaleLowerCase()}${this.getAttributes(
                 element
@@ -101,29 +99,31 @@ export default class Game extends CreateLevel {
             const node = document.querySelector('.tooltip') as HTMLElement;
             node.classList.toggle(Classes.HIDDEN);
             node.innerHTML = tooltipText;
-            node.style.left = `${element.getClientRects()[0].x}px`;
+            node.style.left = `${element.getClientRects()[0].x - 60}px`;
             node.style.top = `${element.getClientRects()[0].y - 50}px`;
         }
     };
 
     highlightElement = (e: Event): void => {
-        const target = e.target as Element;
-        const elementsCode = Array.prototype.slice.call(this.htmlCode.querySelectorAll('*'));
-        const elementsTable = Array.prototype.slice.call(this.table.querySelectorAll('*'));
-        const index = target.tagName !== 'DIV' ? elementsTable.indexOf(target) : elementsCode.indexOf(target);
-        if (e.type === 'mouseover') {
-            if (this.currentElem) return;
-            this.currentElem = e.target as HTMLElement;
-            this.showTooltip(elementsTable[index]);
-            elementsTable[index].classList.add(Classes.ACTIVE);
-            elementsCode[index]?.classList.add(Classes.BACKLIGHT);
-        }
-        if (e.type === 'mouseout') {
-            if (!this.currentElem) return;
-            elementsTable[index].classList.remove(Classes.ACTIVE);
-            elementsCode[index]?.classList.remove(Classes.BACKLIGHT);
-            this.currentElem = null;
-            this.showTooltip(elementsTable[index]);
+        if (this.isGame) {
+            const target = e.target as Element;
+            const elementsCode = Array.prototype.slice.call(this.htmlCode.querySelectorAll('*'));
+            const elementsTable = Array.prototype.slice.call(this.table.querySelectorAll('*'));
+            const index = target.tagName !== 'DIV' ? elementsTable.indexOf(target) : elementsCode.indexOf(target);
+            if (e.type === 'mouseover') {
+                if (this.currentElem) return;
+                this.currentElem = e.target as HTMLElement;
+                this.showTooltip(elementsTable[index]);
+                elementsTable[index]?.classList.add(Classes.ACTIVE);
+                elementsCode[index]?.classList.add(Classes.BACKLIGHT);
+            }
+            if (e.type === 'mouseout') {
+                if (!this.currentElem) return;
+                elementsTable[index]?.classList.remove(Classes.ACTIVE);
+                elementsCode[index]?.classList.remove(Classes.BACKLIGHT);
+                this.currentElem = null;
+                this.showTooltip(elementsTable[index]);
+            }
         }
     };
 
@@ -149,7 +149,7 @@ export default class Game extends CreateLevel {
     createTable = (): HTMLElement => {
         this.table.classList.add(Classes.TABLE);
         this.table.innerHTML = normalizeHtml(this.levels[this.levelActive].boardMarkup);
-        this.table.querySelectorAll('*').forEach((item: any) => {
+        this.table.querySelectorAll('*').forEach((item: Element) => {
             if (item.closest(this.levels[this.levelActive].selector)) {
                 item.closest(`${this.levels[this.levelActive].selector}`)?.classList.add(Classes.SELECTED);
             }
@@ -229,7 +229,7 @@ export default class Game extends CreateLevel {
         container.append(
             this.createBlockLevel(),
             this.createWrapperGame(),
-            this.createElement(Tags.SPAN, [Classes.TOOLTIP])
+            this.createElement(Tags.DIV, [Classes.TOOLTIP])
         );
         document.body.append(container);
     };
