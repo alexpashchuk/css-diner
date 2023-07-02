@@ -1,13 +1,20 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
-import { Classes, Tags, Text } from '../interface/enums';
 import CreateLevel from './createLevel';
-import levels from '../data/levelsData';
+
+import { normalizeHtml } from '../utils/utils';
+import { Classes, Tags, Text } from '../interface/enums';
+import { DataLevels } from '../interface/interface';
 
 export default class Game extends CreateLevel {
     currentElem: HTMLElement | null = null;
 
     isPassedLevel = true;
+
+    constructor(data: DataLevels[]) {
+        super(data);
+        this.levels = data;
+    }
 
     createFormEditor = (): HTMLFormElement => {
         this.formEditor.classList.add(Classes.FORM);
@@ -29,10 +36,10 @@ export default class Game extends CreateLevel {
 
         this.formEditor.addEventListener('submit', (e: Event) => {
             e.preventDefault();
-            if (this.input.value === levels[this.levelActive].selector) {
+            if (this.input.value === this.levels[this.levelActive].selector) {
                 this.table.querySelectorAll('*').forEach((item: Element) => {
-                    if (item.closest(levels[this.levelActive].selector)) {
-                        item.closest(`${levels[this.levelActive].selector}`)?.classList.add('win');
+                    if (item.closest(this.levels[this.levelActive].selector)) {
+                        item.closest(`${this.levels[this.levelActive].selector}`)?.classList.add('win');
                         item.addEventListener('animationend', () => {
                             this.getNewLevel();
                         });
@@ -71,8 +78,8 @@ export default class Game extends CreateLevel {
     showAnswer = (): void => {
         if (this.isPrintText) {
             this.isPrintText = false;
-            const arrayResponseLetters: string[] = levels[this.levelActive].selector.split('');
-            this.input.classList.remove('blink');
+            const arrayResponseLetters: string[] = this.levels[this.levelActive].selector.split('');
+            this.input.classList.remove(Classes.BLINK);
             let count = 0;
             const printText = (): NodeJS.Timeout | string => {
                 if (count === arrayResponseLetters.length) return this.input.value;
@@ -92,7 +99,7 @@ export default class Game extends CreateLevel {
                 element
             )}>&lt/${element.tagName.toLocaleLowerCase()}>`;
             const node = document.querySelector('.tooltip') as HTMLElement;
-            node.classList.toggle('hidden');
+            node.classList.toggle(Classes.HIDDEN);
             node.innerHTML = tooltipText;
             node.style.left = `${element.getClientRects()[0].x}px`;
             node.style.top = `${element.getClientRects()[0].y - 50}px`;
@@ -108,13 +115,13 @@ export default class Game extends CreateLevel {
             if (this.currentElem) return;
             this.currentElem = e.target as HTMLElement;
             this.showTooltip(elementsTable[index]);
-            elementsTable[index].classList.add('active');
-            elementsCode[index]?.classList.add('backlight');
+            elementsTable[index].classList.add(Classes.ACTIVE);
+            elementsCode[index]?.classList.add(Classes.BACKLIGHT);
         }
         if (e.type === 'mouseout') {
             if (!this.currentElem) return;
-            elementsTable[index].classList.remove('active');
-            elementsCode[index]?.classList.remove('backlight');
+            elementsTable[index].classList.remove(Classes.ACTIVE);
+            elementsCode[index]?.classList.remove(Classes.BACKLIGHT);
             this.currentElem = null;
             this.showTooltip(elementsTable[index]);
         }
@@ -122,7 +129,7 @@ export default class Game extends CreateLevel {
 
     createHtmlCode = (): HTMLDivElement => {
         this.htmlCode.classList.add(Classes.HTML_CODE);
-        this.htmlCode.append(this.getViewerCode(levels[this.levelActive].boardMarkup));
+        this.htmlCode.append(this.getViewerCode(this.levels[this.levelActive].boardMarkup));
 
         this.htmlCode.addEventListener('mouseover', (e: Event) => {
             const target = e.target as Element;
@@ -141,10 +148,10 @@ export default class Game extends CreateLevel {
 
     createTable = (): HTMLElement => {
         this.table.classList.add(Classes.TABLE);
-        this.table.innerHTML = levels[this.levelActive].boardMarkup;
+        this.table.innerHTML = normalizeHtml(this.levels[this.levelActive].boardMarkup);
         this.table.querySelectorAll('*').forEach((item: any) => {
-            if (item.closest(levels[this.levelActive].selector)) {
-                item.closest(`${levels[this.levelActive].selector}`)?.classList.add('selected');
+            if (item.closest(this.levels[this.levelActive].selector)) {
+                item.closest(`${this.levels[this.levelActive].selector}`)?.classList.add(Classes.SELECTED);
             }
         });
         this.table.addEventListener('mouseover', (e: Event) => {
@@ -176,21 +183,41 @@ export default class Game extends CreateLevel {
         container.append(
             this.createBlock(
                 Tags.DIV,
+                Classes.HEADING_WRAPPER,
+                this.createElement(Tags.H2, [Classes.LAYOUT_HEADER], this.levels[this.levelActive].doThis)
+            ),
+            this.createBlock(
+                Tags.DIV,
                 [Classes.LAYOUT],
-                this.createElement(Tags.H2, [Classes.LAYOUT_HEADER], levels[this.levelActive].doThis),
-                this.createTable()
+
+                this.createBlock(
+                    Tags.DIV,
+                    Classes.TABLE_PLANETS,
+                    this.createBlock(Tags.DIV, [Classes.TABLE_WRAPPER], this.createTable())
+                )
             ),
             this.createBlock(
                 Tags.DIV,
-                [Classes.EDITOR],
-                this.createHeaderElement(Tags.DIV, [Classes.EDITOR], Text.CSS, Text.STYLE),
-                this.createBlock(Tags.DIV, [Classes.EDITOR_MAIN], this.createFormEditor(), this.createLineNumber())
+                Classes.EDITOR_WRAPPER,
+                this.createBlock(
+                    Tags.DIV,
+                    [Classes.EDITOR],
+                    this.createHeaderElement(Tags.DIV, [Classes.EDITOR], Text.CSS, Text.STYLE),
+                    this.createBlock(Tags.DIV, [Classes.EDITOR_MAIN], this.createFormEditor(), this.createLineNumber())
+                ),
+                this.createBlock(
+                    Tags.DIV,
+                    [Classes.VIEWER],
+                    this.createHeaderElement(Tags.DIV, [Classes.VIEWER], Text.HTML, Text.INDEX),
+                    this.createBlock(Tags.DIV, [Classes.VIEWER_MAIN], this.createLineNumber(), this.createHtmlCode())
+                )
             ),
             this.createBlock(
-                Tags.DIV,
-                [Classes.VIEWER],
-                this.createHeaderElement(Tags.DIV, [Classes.VIEWER], Text.HTML, Text.INDEX),
-                this.createBlock(Tags.DIV, [Classes.VIEWER_MAIN], this.createLineNumber(), this.createHtmlCode())
+                Tags.FOOTER,
+                [Classes.FOOTER],
+                this.createLink([Classes.GIT], Text.GITHUB, Text.LINK_GITHUB),
+                this.createElement(Tags.DIV, [Classes.YEARS], Text.RS),
+                this.createLink([Classes.RS_SCHOOL], '', Text.LINK_RS)
             )
         );
         return container;

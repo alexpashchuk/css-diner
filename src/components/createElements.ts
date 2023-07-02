@@ -20,7 +20,7 @@ export default class CreateElements {
     htmlCode = document.createElement(Tags.DIV);
 
     formEditor = document.createElement(Tags.FORM);
-    createBlock = (tagName: Tags, className?: Classes[] | Classes | string[], ...arg: HTMLElement[]): HTMLElement => {
+    createBlock = (tagName: Tags, className?: Classes[] | Classes, ...arg: HTMLElement[]): HTMLElement => {
         const block = document.createElement(tagName);
         if (Array.isArray(className)) {
             block.classList.add(...className);
@@ -45,6 +45,14 @@ export default class CreateElements {
         const element = document.createElement(tagName);
         element.classList.add(...className);
         element.innerHTML = text || '';
+        return element;
+    };
+
+    createLink = (className: string[], text: string, href: string): HTMLElement => {
+        const element = document.createElement('a');
+        element.classList.add(...className);
+        element.innerHTML = text || '';
+        element.href = href;
         return element;
     };
 

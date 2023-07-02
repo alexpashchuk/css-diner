@@ -1,5 +1,5 @@
 :root {
-    --color-body: #543ea3;
+    --color-body: #3e4d36;
 
     --color-light-s: #fafafa;
     --color-light-m: #f6f6f6;
@@ -12,6 +12,8 @@
 
     --color-passed: #32c741;
     --color-no-passed: #bd3e7b;
+    --color-button: #ded714;
+    --color-button-hover: #e09119;
 
     --dark-border: 2px solid var(--color-light-s);
     --light-border: 2px solid var(--color-light-s);
@@ -100,18 +102,30 @@ html {
 }
 
 body {
-    background-color: var(--color-body);
+    background-image: linear-gradient(
+        to left bottom,
+        #d65db1,
+        #c74bb2,
+        #b53ab3,
+        #a02bb6,
+        #861eba,
+        #7d23be,
+        #7327c1,
+        #672bc5,
+        #7339c9,
+        #7e45cd,
+        #8852d0,
+        #925ed4
+    );
     position: relative;
     font-size: 15px;
+    min-height: 100vh;
 }
 
 .wrapper {
-    display: grid;
-    grid-template-columns: 0.3fr 0.7fr;
+    display: flex;
     gap: 10px;
     width: 100%;
-    min-height: 100vh;
-    max-width: 1280px;
     margin: 0 auto;
 }
 
@@ -120,9 +134,9 @@ body {
 .level {
     position: relative;
     z-index: 1;
-    border-radius: 5px;
     overflow: hidden;
-    margin: 5px;
+    max-width: 380px;
+    min-height: 100vh;
 }
 
 .level-header {
@@ -161,7 +175,7 @@ body {
 
 .level-help {
     height: 100%;
-    padding: 10px;
+    padding: 10px 10px 50px;
     color: var(--color-light-s);
     background-color: var(--color-dark-s);
 }
@@ -212,6 +226,7 @@ body {
 
 .level-help .example {
     margin-bottom: 10px;
+    line-height: 180%;
 }
 
 .level-help .syntax {
@@ -237,11 +252,15 @@ body {
     bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
-    border-radius: 3px;
-    background-color: var(--color-gray-m);
+    border-radius: 10px;
+    background-color: var(--color-button);
     color: var(--color-dark-s);
     padding: 5px 10px;
-    transition: 0.5s;
+    transition: 0.3s;
+}
+
+.reset:hover {
+    background-color: var(--color-button-hover);
 }
 
 .check-mark {
@@ -313,6 +332,11 @@ body {
     height: 22px;
     border: 2px solid transparent;
     border-radius: 100px;
+}
+
+.button-next:hover,
+.button-prev:hover {
+    background-color: var(--color-dark-s);
 }
 
 .button-next::after {
@@ -400,40 +424,94 @@ body {
 /*---------------game--------------*/
 
 .game {
-    display: grid;
-    grid-template-rows: 0.4fr 0.6fr;
-    grid-template-columns: 1fr 1fr;
+    flex-grow: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     gap: 10px;
-    margin: 5px;
-    grid-template-areas:
-        'table table'
-        'editor viewer';
+}
+
+.heading-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-basis: 10%;
 }
 
 .layout {
-    grid-area: table;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-basis: 40%;
+}
+
+.table-wrapper {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    padding-bottom: 20%;
 }
 
 .table {
     width: 100%;
-    height: 150px;
+    height: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
     position: relative;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+}
+
+.table-planets {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.table-planets:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-image: url(../assets/bg.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 85%;
+}
+
+.table .active {
+    border: 3px solid rgba(56, 235, 128, 0.7);
 }
 
 /*---------------editor--------------*/
 
+.editor-wrapper {
+    position: relative;
+    font-family: monospace, sans-serif;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-basis: 45%;
+    gap: 10px;
+}
+
 .editor {
-    grid-area: editor;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    flex-grow: 1;
+    flex-basis: 50%;
+    height: 100%;
     overflow: hidden;
-    border-radius: 5px;
 }
 
 .editor-header {
@@ -470,16 +548,31 @@ body {
     background-color: inherit;
     transition: 0.5s;
 }
+.form-help,
+.form-button {
+    height: 27px;
+    font-size: 12px;
+    border-radius: 10px;
+    background-color: var(--color-button);
+    color: var(--color-dark-s);
+    transition: 0.3s;
+    padding: 0 16px;
+}
+
+.form-help:hover,
+.form-button:hover {
+    background-color: var(--color-button-hover);
+}
 
 /*---------------viewer--------------*/
 
 .viewer {
-    grid-area: viewer;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    flex-grow: 1;
+    flex-basis: 50%;
+    height: 100%;
     overflow: hidden;
-    border-radius: 5px;
 }
 
 .viewer-header {
@@ -505,6 +598,10 @@ body {
     color: var(--color-gray-m);
 }
 
+.html-code * {
+    cursor: default;
+}
+
 .backlight {
     color: var(--color-light-m);
 }
@@ -521,64 +618,248 @@ body {
     box-shadow: -1px 0px 6px 0px rgba(0, 0, 0, 0.5);
 }
 
+.footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    width: 100%;
+    flex-basis: 5%;
+    background-color: var(--color-dark-s);
+}
+
+.years,
+.rs-school,
+.git {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-light-s);
+}
+.footer .rs-school:before,
+.footer .git:before {
+    content: '';
+    display: block;
+    width: 25px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-image: url(../assets/github.svg);
+}
+
+.footer .git:before {
+    width: 25px;
+    height: 25px;
+    background-image: url(../assets/github.svg);
+}
+
+.footer .rs-school:before {
+    width: 80px;
+    height: 30px;
+    background-image: url(../assets/rs-school.svg);
+}
+
 .active {
     box-shadow: 0px 4px 1px -1px rgba(0, 0, 0, 0.2), 0px 4px 1px 0px rgba(0, 0, 0, 0.14),
         0px 4px 3px 0px rgba(0, 0, 0, 0.12);
 }
 
-plate {
+/*---------------characters--------------*/
+
+.table egg,
+.table robot,
+.table pig,
+.table ship,
+.table cage,
+.table bird {
     position: relative;
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    display: flex;
-    background-color: burlywood;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    bottom: 0;
+    display: inline-block;
+    width: 5vw;
+    height: 5vw;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+    transition: bottom 0.1s linear;
+    border: 3px solid transparent;
+    z-index: 1;
 }
 
-bento {
-    position: relative;
-    width: 90px;
-    height: 90px;
-    display: flex;
-    background-color: rgb(233, 218, 198);
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
-}
-
-apple {
+.table egg:after,
+.table robot:after,
+.table pig:after,
+.table cage:after,
+.table ship:after,
+.table bird:after {
+    content: '';
     position: absolute;
-    top: calc(50% - 10px);
-    right: 0;
-    left: 0;
-    margin: 0 auto;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    background-color: red;
-    border-radius: 50%;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    bottom: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
-orange {
+.table ship {
+    width: 10vw;
+    height: 5vw;
+}
+
+.table robot#r2,
+.table pig#green,
+.table pig#black {
+    bottom: 35%;
+    left: 15%;
+}
+
+.table pig#officer {
+    width: 4vw;
+    height: 4vw;
+    left: 9%;
+}
+
+.table pig#cold {
     position: absolute;
-    top: calc(50% - 10px);
-    right: 0;
-    left: 0;
-    margin: 0 auto;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    background-color: orange;
-    border-radius: 50%;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    bottom: -300%;
+}
+
+.table r2#robot {
+    left: -5%;
+}
+
+.table cage#cage {
+    left: 5%;
+}
+
+.table pig:after {
+    background-image: url(../assets/officer.png);
+}
+
+.table bird:after {
+    background-image: url(../assets/skywalker.png);
+}
+
+.table egg:after {
+    background-image: url(../assets/egg-white.png);
+}
+
+.table pig.vader:after {
+    background-image: url(../assets/vader.png);
+}
+
+.table pig.snowtrooper:after {
+    background-image: url(../assets/snowtrooper.png);
+}
+
+.table pig.officer:after {
+    background-image: url(../assets/officer.png);
+}
+
+.table pig.frozen:after {
+    background-image: url(../assets/frozen.png);
+}
+
+.table pig.bubbles:after {
+    background-image: url(../assets/bubbles.png);
+}
+
+.table bird.skywalker:after {
+    background-image: url(../assets/skywalker.png);
+}
+
+.table bird.pilot:after {
+    background-image: url(../assets/pilot.png);
+}
+
+.table .frozen#cold:after {
+    transform: rotate(180deg);
+}
+
+.table robot:after {
+    background-image: url(../assets/r2.png);
+}
+
+.table ship:after {
+    background-image: url(../assets/ship.png);
+}
+
+.table cage:after {
+    background-image: url(../assets/cage.png);
+}
+
+.table egg.yellow:after {
+    background-image: url(../assets/egg-yellow.png);
+}
+
+.table egg.white:after {
+    background-image: url(../assets/egg-white.png);
+}
+
+.table bird[name='Blue Squadron']:before,
+.table pig[name='Snowtrooper']:before,
+.table pig[name='Officer Pig']:before,
+.table pig[name='Darth Vader']:before,
+.table robot[name='R2-D2']:before,
+.table bird[name='Luke Skywalker']:before {
+    position: absolute;
+    bottom: -55%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    border-radius: 5px;
+    color: var(--color-dark-s);
+    background-color: var(--color-gray-s);
+    z-index: 3;
+    text-align: center;
+}
+
+.table egg.yellow,
+.table egg.white {
+    bottom: -15%;
+    left: 25%;
+    width: 2vw;
+    height: 3vw;
+}
+
+.table egg#egg {
+    bottom: 28%;
+    left: 50%;
+}
+
+.table pig[name='Darth Vader']:before {
+    content: 'Darth Vader';
+}
+
+.table bird[name='Blue Squadron']:before {
+    content: 'Blue Squadron';
+}
+
+.table pig[name='Snowtrooper']:before {
+    content: 'Snowtrooper';
+    min-width: 60px;
+    bottom: -35%;
+}
+
+.table pig[name='Officer Pig']:before {
+    content: 'Officer Pig';
+}
+
+.table bird[name='Luke Skywalker']:before {
+    content: 'Luke Skywalker';
+}
+
+.table robot[name='R2-D2']:before {
+    content: 'R2-D2';
+    min-width: 60px;
+    bottom: -35%;
 }
 
 .tooltip {
-    background-color: cadetblue;
+    background-color: var(--color-light-m);
     position: absolute;
     display: none;
     text-align: center;
@@ -594,27 +875,7 @@ orange {
 /*---------------animation--------------*/
 
 .selected {
-    animation: strobe 1s infinite;
-    animation-delay: 0s, 0.5s;
-}
-
-@keyframes strobe {
-    0% {
-        transform: scale(1, 1);
-    }
-    10% {
-        transform: scale(1.05, 1.05);
-    }
-    50% {
-        transform: scale(1.1, 1.1);
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-    }
-    60% {
-        transform: scale(1.05, 1.05);
-    }
-    100% {
-        transform: scale(1, 1);
-    }
+    animation: dance 0.5s infinite alternate;
 }
 
 .win {
@@ -687,19 +948,40 @@ orange {
     }
 }
 
+@keyframes dance {
+    0% {
+        transform: skew(3deg, 1deg) scale(1, 1) translate(-6%, 0%);
+    }
+
+    50% {
+        transform: skew(0deg, 0deg) scale(1, 0.9) translate(0%, 5%);
+    }
+
+    100% {
+        transform: skew(-3deg, 1deg) scale(1, 1) translate(6%, 0%);
+    }
+}
+
 @media (max-width: 1024px) {
-    .game {
-        grid-template-rows: repeat(3, 1fr);
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            'table'
-            'editor'
-            'viewer';
+    .editor-wrapper {
+        flex-direction: column;
+    }
+
+    .level {
+        max-width: 280px;
+    }
+
+    .viewer-main {
+        overflow-y: scroll;
     }
 }
 
 @media (max-width: 768px) {
     .wrapper {
-        grid-template-columns: 1fr;
+        flex-direction: column;
+    }
+    .level {
+        max-width: 100%;
+        min-height: 100%;
     }
 }

@@ -1,21 +1,24 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
-import levels from '../data/levelsData';
 import CreateElements from './createElements';
-import { Classes, Tags } from '../interface/enums';
+import { Classes, Tags, Text } from '../interface/enums';
+import { DataLevels } from '../interface/interface';
 
 class CreateLevel extends CreateElements {
-    isMenuActive = false;
-
     isPrintText = true;
-
     levelActive = Number(localStorage.getItem('level')) || 0;
+    levels;
+
+    constructor(data: DataLevels[]) {
+        super();
+        this.levels = data;
+    }
 
     createLevelHeader = (): HTMLDivElement => {
-        this.levelHeader.classList.add('level-header');
+        this.levelHeader.classList.add(Classes.LEVEL_HEADER);
 
-        this.levelNumber.classList.add('level-title');
-        this.levelNumber.textContent = `Level ${this.levelActive + 1} of ${levels.length}`;
+        this.levelNumber.classList.add(Classes.LEVEL_TITLE);
+        this.levelNumber.textContent = `Level ${this.levelActive + 1} of ${this.levels.length}`;
 
         // this.levelHeader.append(
         //     this.createBlock(Tags.DIV, ['burger'], this.createButton([Classes.BUTTON_MENU], 'button', this.toggleMenu))
@@ -26,11 +29,11 @@ class CreateLevel extends CreateElements {
                 'button',
                 this.toggleMenu,
                 '',
-                this.createElement(Tags.DIV, ['burger'])
+                this.createElement(Tags.DIV, [Classes.BURGER])
             )
         );
         this.levelHeader.append(this.levelNumber);
-        this.levelHeader.append(this.createElement(Tags.SPAN, ['check-mark', 'check']));
+        this.levelHeader.append(this.createElement(Tags.SPAN, [Classes.CHECK_MARK, Classes.CHECK]));
         this.levelHeader.append(this.createButton([Classes.BUTTON_PREV], 'button', this.showPrevLevel));
         this.levelHeader.append(this.createButton([Classes.BUTTON_NEXT], 'button', this.showNextLevel));
 
@@ -38,16 +41,16 @@ class CreateLevel extends CreateElements {
     };
 
     createMenuLevel = (): HTMLDivElement => {
-        this.rootMenu.classList.add('level-menu');
-        this.listMenu.classList.add('level-list');
+        this.rootMenu.classList.add(Classes.LEVEL_MENU);
+        this.listMenu.classList.add(Classes.LEVEL_LIST);
 
-        for (let i = 0; i < levels.length; i += 1) {
+        for (let i = 0; i < this.levels.length; i += 1) {
             const item = document.createElement('li');
             item.classList.add('list-item');
-            item.classList.add(this.levelActive + 1 === i + 1 ? 'list-active' : 'list-item');
+            item.classList.add(this.levelActive + 1 === i + 1 ? Classes.LIST_ACTIVE : Classes.LIST_ITEM);
             item.id = (i + 1).toString();
             item.innerHTML = `<span class="check-mark" aria-hidden="true"></span>
-            <span class="list-text">${i + 1}.${levels[i].syntax}</span>`;
+            <span class="list-text">${i + 1}.${this.levels[i].syntax}</span>`;
             this.listMenu.append(item);
             item.addEventListener('click', () => {
                 this.levelActive = +item.id - 1;
@@ -62,18 +65,18 @@ class CreateLevel extends CreateElements {
 
     createLevelHelp = (): HTMLDivElement => {
         this.rootHelp.innerHTML = '';
-        this.rootHelp.classList.add('level-help');
+        this.rootHelp.classList.add(Classes.LEVEL_HELP);
         this.rootHelp.append(
-            this.createElement(Tags.H2, ['selector-name'], levels[this.levelActive].selectorName),
-            this.createElement(Tags.H3, ['title'], levels[this.levelActive].helpTitle),
-            this.createElement(Tags.H2, ['syntax'], levels[this.levelActive].syntax),
-            this.createElement(Tags.P, ['description'], levels[this.levelActive].help),
-            this.createButton(['reset'], 'button', this.reset, 'RESET')
+            this.createElement(Tags.H2, [Classes.SELECTOR_NAME], this.levels[this.levelActive].selectorName),
+            this.createElement(Tags.H3, [Classes.TITLE], this.levels[this.levelActive].helpTitle),
+            this.createElement(Tags.H2, [Classes.SYNTAX], this.levels[this.levelActive].syntax),
+            this.createElement(Tags.P, [Classes.DESCRIPTION], this.levels[this.levelActive].help),
+            this.createButton([Classes.RESET], 'button', this.reset, Text.RESET)
         );
-        if (levels[this.levelActive].examples) {
-            this.rootHelp.append(this.createElement(Tags.H3, ['examples'], 'Examples'));
-            levels[this.levelActive].examples?.forEach((el) =>
-                this.rootHelp.append(this.createElement(Tags.DIV, ['example'], el))
+        if (this.levels[this.levelActive].examples) {
+            this.rootHelp.append(this.createElement(Tags.H3, [Classes.EXAMPLES], Text.EXAMPLES));
+            this.levels[this.levelActive].examples?.forEach((el) =>
+                this.rootHelp.append(this.createElement(Tags.DIV, [Classes.EXAMPLE], el))
             );
         }
 
@@ -87,7 +90,7 @@ class CreateLevel extends CreateElements {
     };
 
     showNextLevel = (): void => {
-        if (+this.levelActive <= levels.length - 1) {
+        if (+this.levelActive <= this.levels.length - 1) {
             this.levelActive += 1;
             this.getNewLevel();
         }
@@ -103,13 +106,13 @@ class CreateLevel extends CreateElements {
     toggleMenu = (): void => {
         const burgerLevel = document.querySelector('.button-menu') as HTMLElement;
         const menuLevel = document.querySelector('.level-menu') as HTMLElement;
-        burgerLevel.classList.toggle('open');
-        menuLevel.classList.toggle('open');
+        burgerLevel.classList.toggle(Classes.OPEN);
+        menuLevel.classList.toggle(Classes.OPEN);
     };
 
     toggleListActives = (): void => {
-        this.levelHeader.children[2].classList.remove('not-passed', 'passed');
-        this.levelNumber.textContent = `Level ${this.levelActive + 1} of ${levels.length}`;
+        this.levelHeader.children[2].classList.remove(Classes.NOT_PASSED, Classes.PASSED);
+        this.levelNumber.textContent = `Level ${this.levelActive + 1} of ${this.levels.length}`;
 
         // const objProgress = JSON.parse(localStorage.getItem('progress') || '') || {};
         const objProgress = JSON.parse(localStorage.getItem('progress')) || {};
@@ -117,18 +120,18 @@ class CreateLevel extends CreateElements {
             this.levelHeader.children[2].classList.add('passed');
         }
         if (objProgress[this.levelActive] && objProgress[this.levelActive].incorrect) {
-            this.levelHeader.children[2].classList.add('not-passed');
+            this.levelHeader.children[2].classList.add(Classes.NOT_PASSED);
         }
         this.listMenu.childNodes.forEach((item: any, i: number) => {
             item.classList.remove('list-active');
-            if (+item.id === this.levelActive + 1) item.classList.add('list-active');
+            if (+item.id === this.levelActive + 1) item.classList.add(Classes.LIST_ACTIVE);
             if (objProgress[`${i}`]) {
-                item.children[0].classList.remove('not-passed', 'passed');
+                item.children[0].classList.remove(Classes.NOT_PASSED, Classes.PASSED);
                 if (objProgress[`${i}`].correct && !objProgress[`${i}`].incorrect) {
-                    item.children[0].classList.add('passed');
+                    item.children[0].classList.add(Classes.PASSED);
                 }
                 if (objProgress[`${i}`].incorrect && !objProgress[`${i}`].correct) {
-                    item.children[0].classList.add('not-passed');
+                    item.children[0].classList.add(Classes.NOT_PASSED);
                 }
             }
         });
@@ -137,16 +140,16 @@ class CreateLevel extends CreateElements {
     getNewLevel = (): void => {
         this.htmlCode.innerHTML = ``;
         this.input.value = '';
-        this.input.classList.add('blink');
+        this.input.classList.add(Classes.BLINK);
         this.input.focus();
         this.isPrintText = true;
-        this.htmlCode.append(this.getViewerCode(levels[this.levelActive].boardMarkup));
-        this.table.innerHTML = levels[this.levelActive].boardMarkup;
+        this.htmlCode.append(this.getViewerCode(this.levels[this.levelActive]?.boardMarkup));
+        this.table.innerHTML = this.levels[this.levelActive]?.boardMarkup;
         const elem = document.querySelector('.layout-header') as HTMLElement;
-        elem.innerHTML = levels[this.levelActive].doThis;
+        elem.innerHTML = this.levels[this.levelActive]?.doThis;
         this.table.querySelectorAll('*').forEach((item: Element) => {
-            if (item.closest(levels[this.levelActive].selector)) {
-                item.closest(`${levels[this.levelActive].selector}`)?.classList.add('selected');
+            if (item.closest(this.levels[this.levelActive].selector)) {
+                item.closest(`${this.levels[this.levelActive].selector}`)?.classList.add(Classes.SELECTED);
             }
         });
         this.rootLevel.removeChild(this.rootHelp);
@@ -189,7 +192,7 @@ class CreateLevel extends CreateElements {
     };
 
     createBlockLevel = (): HTMLDivElement => {
-        this.rootLevel.classList.add('level');
+        this.rootLevel.classList.add(Classes.LEVEL);
         this.rootLevel.append(this.createLevelHeader(), this.createMenuLevel(), this.createLevelHelp());
         this.toggleListActives();
         return this.rootLevel;
