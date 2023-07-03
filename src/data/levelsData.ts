@@ -19,7 +19,7 @@ const levelsData = [
     {
         helpTitle: 'Select an element inside another element',
         selectorName: 'Type Selector',
-        doThis: 'Select the vader bird',
+        doThis: 'Select the vader pig',
         selector: 'ship pig',
         syntax: 'A B',
         help: 'Selects all <strong>B</strong> inside of <strong>A</strong>. <strong>B</strong> is called a descendant because it is inside of another element.',

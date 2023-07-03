@@ -671,8 +671,7 @@ body {
 }
 
 .active {
-    box-shadow: 0 4px 1px -1px rgba(0, 0, 0, 0.2), 0 4px 1px 0 rgba(0, 0, 0, 0.14),
-        0 4px 3px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 1px -1px rgba(0, 0, 0, 0.2), 0 4px 1px 0 rgba(0, 0, 0, 0.14), 0 4px 3px 0 rgba(0, 0, 0, 0.12);
 }
 
 /*---------------characters--------------*/
@@ -1019,5 +1018,75 @@ body {
     .level {
         max-width: 100%;
         min-height: 100%;
+    }
+
+    .level-help .selector-name {
+        margin-bottom: 5px;
+    }
+
+    .level-help .title {
+        margin-bottom: 5px;
+    }
+
+    .level-help .description {
+        margin-bottom: 5px;
+    }
+
+    .level-help .examples {
+        margin-bottom: 5px;
+    }
+
+    .level-help .example {
+        margin-bottom: 10px;
+    }
+
+    .level-help .syntax {
+        margin-bottom: 7px;
+    }
+
+    .table egg,
+    .table robot,
+    .table pig,
+    .table ship,
+    .table cage,
+    .table bird {
+        width: 10vw;
+        height: 10vw;
+    }
+
+    .table ship {
+        width: 17vw;
+        height: 10vw;
+    }
+
+    .table pig#officer {
+        width: 8vw;
+        height: 8vw;
+    }
+
+    .table egg.yellow,
+    .table egg.white {
+        width: 5vw;
+        height: 6vw;
+    }
+
+    .table bird[name='Blue Squadron']:before,
+    .table pig[name='Snowtrooper']:before,
+    .table pig[name='Officer Pig']:before,
+    .table pig[name='Darth Vader']:before,
+    .table robot[name='R2-D2']:before,
+    .table bird[name='Luke Skywalker']:before {
+        position: absolute;
+        bottom: -85%;
+        font-size: 12px;
+    }
+
+    .table robot[name='R2-D2']:before,
+    .table pig[name='Snowtrooper']:before {
+        bottom: -55%;
+    }
+
+    .tooltip {
+        font-size: 12px;
     }
 }
