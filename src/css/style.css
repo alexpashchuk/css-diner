@@ -513,6 +513,7 @@ body {
     flex-grow: 1;
     flex-basis: 50%;
     height: 100%;
+    min-height: 145px;
     overflow: hidden;
 }
 
@@ -533,6 +534,7 @@ body {
     background-color: var(--color-dark-s);
     height: 100%;
     line-height: 140%;
+    flex-grow: 1;
 }
 
 .editor-main .form {
@@ -578,6 +580,7 @@ body {
     flex-grow: 1;
     flex-basis: 50%;
     height: 100%;
+    min-height: 205px;
     overflow: hidden;
 }
 
@@ -598,9 +601,11 @@ body {
     background-color: var(--color-dark-s);
     height: 100%;
     line-height: 140%;
+    flex-grow: 1;
 }
 
 .html-code {
+    padding-top: 10px;
     color: var(--color-gray-m);
 }
 
@@ -1070,6 +1075,11 @@ body {
         height: 6vw;
     }
 
+    .table egg#egg {
+        bottom: 35%;
+        left: 55%;
+    }
+
     .table bird[name='Blue Squadron']:before,
     .table pig[name='Snowtrooper']:before,
     .table pig[name='Officer Pig']:before,
@@ -1084,6 +1094,11 @@ body {
     .table robot[name='R2-D2']:before,
     .table pig[name='Snowtrooper']:before {
         bottom: -55%;
+    }
+
+    .table pig#cold {
+        position: absolute;
+        bottom: -190%;
     }
 
     .tooltip {
