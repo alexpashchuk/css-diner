@@ -3,17 +3,17 @@ import { Classes, Tags, Text } from '../interface/enums';
 import { DataLevels } from '../interface/interface';
 
 class CreateLevel extends CreateElements {
-    isPrintText = true;
-    isGame = true;
-    levelActive = Number(localStorage.getItem('level')) || 0;
-    levels;
+    protected isPrintText = true;
+    protected isGame = true;
+    protected levelActive = Number(localStorage.getItem('level')) || 0;
+    protected levels;
 
-    constructor(data: DataLevels[]) {
+    constructor(public data: DataLevels[]) {
         super();
         this.levels = data;
     }
 
-    createLevelHeader = (): HTMLDivElement => {
+    private createLevelHeader = (): HTMLDivElement => {
         this.levelHeader.classList.add(Classes.LEVEL_HEADER);
 
         this.levelNumber.classList.add(Classes.LEVEL_TITLE);
@@ -36,7 +36,7 @@ class CreateLevel extends CreateElements {
         return this.levelHeader;
     };
 
-    createMenuLevel = (): HTMLDivElement => {
+    private createMenuLevel = (): HTMLDivElement => {
         this.rootMenu.classList.add(Classes.LEVEL_MENU);
         this.listMenu.classList.add(Classes.LEVEL_LIST);
 
@@ -59,7 +59,7 @@ class CreateLevel extends CreateElements {
         return this.rootMenu;
     };
 
-    createLevelHelp = (): HTMLDivElement => {
+    private createLevelHelp = (): HTMLDivElement => {
         this.rootHelp.innerHTML = '';
         this.rootHelp.classList.add(Classes.LEVEL_HELP);
         this.rootHelp.append(
@@ -79,34 +79,34 @@ class CreateLevel extends CreateElements {
         return this.rootHelp;
     };
 
-    reset = (): void => {
+    private reset = (): void => {
         this.levelActive = 0;
         localStorage.clear();
         this.getNewLevel();
     };
 
-    showNextLevel = (): void => {
+    private showNextLevel = (): void => {
         if (+this.levelActive < this.levels.length - 1) {
             this.levelActive += 1;
             this.getNewLevel();
         }
     };
 
-    showPrevLevel = (): void => {
+    private showPrevLevel = (): void => {
         if (this.levelActive > 0) {
             this.levelActive -= 1;
             this.getNewLevel();
         }
     };
 
-    toggleMenu = (): void => {
+    private toggleMenu = (): void => {
         const burgerLevel = document.querySelector('.button-menu') as HTMLElement;
         const menuLevel = document.querySelector('.level-menu') as HTMLElement;
         burgerLevel.classList.toggle(Classes.OPEN);
         menuLevel.classList.toggle(Classes.OPEN);
     };
 
-    toggleListActives = (): void => {
+    private toggleListActives = (): void => {
         this.levelHeader.children[2].classList.remove(Classes.NOT_PASSED, Classes.PASSED);
         this.levelNumber.textContent = `Level ${this.levelActive + 1} of ${this.levels.length}`;
 
@@ -132,7 +132,7 @@ class CreateLevel extends CreateElements {
         });
     };
 
-    getNewLevel = (): void => {
+    protected getNewLevel = (): void => {
         if (this.levelActive < this.levels.length) {
             this.isGame = true;
             this.htmlCode.innerHTML = ``;
@@ -161,7 +161,7 @@ class CreateLevel extends CreateElements {
         }
     };
 
-    showScoreResult = (): void => {
+    private showScoreResult = (): void => {
         const objProgress = JSON.parse(localStorage.getItem('progress') || '{}');
         let countCorrect = 0;
         let countIncorrect = 0;
@@ -197,7 +197,7 @@ class CreateLevel extends CreateElements {
         this.table.append(resultScore);
     };
 
-    getAttributes = (child: HTMLElement): string => {
+    protected getAttributes = (child: HTMLElement): string => {
         let childClass;
         const elemChild = child.getAttribute('class');
         if (elemChild) {
@@ -213,7 +213,7 @@ class CreateLevel extends CreateElements {
         }`;
     };
 
-    getViewerCode = (item: Element | string): DocumentFragment | Element => {
+    protected getViewerCode = (item: Element | string): DocumentFragment | Element => {
         const container = document.createElement('div');
         typeof item === 'string' ? (container.innerHTML = item) : container.append(item);
         const result = typeof item === 'string' ? document.createDocumentFragment() : item;
@@ -237,7 +237,7 @@ class CreateLevel extends CreateElements {
         return result;
     };
 
-    createBlockLevel = (): HTMLDivElement => {
+    protected createBlockLevel = (): HTMLDivElement => {
         this.rootLevel.classList.add(Classes.LEVEL);
         this.rootLevel.append(this.createLevelHeader(), this.createMenuLevel(), this.createLevelHelp());
         this.toggleListActives();

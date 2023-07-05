@@ -5,16 +5,16 @@ import { Classes, Tags, Text } from '../interface/enums';
 import { DataLevels } from '../interface/interface';
 
 export default class Game extends CreateLevel {
-    currentElem: HTMLElement | null = null;
+    private currentElem: HTMLElement | null = null;
 
-    isPassedLevel = true;
+    private isPassedLevel = true;
 
-    constructor(data: DataLevels[]) {
+    constructor(public data: DataLevels[]) {
         super(data);
         this.levels = data;
     }
 
-    createFormEditor = (): HTMLFormElement => {
+    private createFormEditor = (): HTMLFormElement => {
         this.formEditor.classList.add(Classes.FORM);
         this.input.classList.add(Classes.FORM_INPUT, Classes.BLINK);
         this.input.placeholder = Text.PLACEHOLDER;
@@ -63,7 +63,7 @@ export default class Game extends CreateLevel {
         return this.formEditor;
     };
 
-    setLocalStorageProgress = (): void => {
+    private setLocalStorageProgress = (): void => {
         const progress = JSON.parse(localStorage.getItem('progress') || '{}') || {};
         const result =
             progress[`${this.levelActive}`] && progress[`${this.levelActive}`].correct
@@ -72,7 +72,7 @@ export default class Game extends CreateLevel {
         localStorage.setItem('progress', JSON.stringify(result));
     };
 
-    showAnswer = (): void => {
+    private showAnswer = (): void => {
         if (this.isPrintText && this.isGame) {
             this.isPrintText = false;
             const arrayResponseLetters: string[] = this.levels[this.levelActive].selector.split('');
@@ -90,7 +90,7 @@ export default class Game extends CreateLevel {
         }
     };
 
-    showTooltip = (element: HTMLElement): void => {
+    private showTooltip = (element: HTMLElement): void => {
         if (!element) return;
         if (element.tagName) {
             const tooltipText = `&lt;${element.tagName.toLocaleLowerCase()}${this.getAttributes(
@@ -104,7 +104,7 @@ export default class Game extends CreateLevel {
         }
     };
 
-    highlightElement = (e: Event): void => {
+    private highlightElement = (e: Event): void => {
         if (this.isGame) {
             const target = e.target as Element;
             const elementsCode = Array.prototype.slice.call(this.htmlCode.querySelectorAll('*'));
@@ -127,7 +127,7 @@ export default class Game extends CreateLevel {
         }
     };
 
-    createHtmlCode = (): HTMLDivElement => {
+    private createHtmlCode = (): HTMLDivElement => {
         this.htmlCode.classList.add(Classes.HTML_CODE);
         this.htmlCode.append(this.getViewerCode(this.levels[this.levelActive].boardMarkup));
 
@@ -146,7 +146,7 @@ export default class Game extends CreateLevel {
         return this.htmlCode;
     };
 
-    createTable = (): HTMLElement => {
+    private createTable = (): HTMLElement => {
         this.table.classList.add(Classes.TABLE);
         this.table.innerHTML = normalizeHtml(this.levels[this.levelActive].boardMarkup);
         this.table.querySelectorAll('*').forEach((item: Element) => {
@@ -169,7 +169,7 @@ export default class Game extends CreateLevel {
         return this.table;
     };
 
-    createLineNumber = (): HTMLDivElement => {
+    private createLineNumber = (): HTMLDivElement => {
         const lineNumber = document.createElement(Tags.DIV);
         lineNumber.classList.add(Classes.NUMBERS);
         for (let i = 0; i < 15; i += 1) {
@@ -177,7 +177,7 @@ export default class Game extends CreateLevel {
         }
         return lineNumber;
     };
-    createWrapperGame = (): HTMLDivElement => {
+    private createWrapperGame = (): HTMLDivElement => {
         const container = document.createElement(Tags.DIV);
         container.classList.add(Classes.GAME);
         container.append(
@@ -223,7 +223,7 @@ export default class Game extends CreateLevel {
         return container;
     };
 
-    initApp = (): void => {
+    public initApp = (): void => {
         const container = document.createElement(Tags.DIV);
         container.classList.add(Classes.WRAPPER);
         container.append(
