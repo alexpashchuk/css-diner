@@ -1,12 +1,10 @@
 import CreateLevel from './createLevel';
-
 import { normalizeHtml } from '../utils/utils';
-import { Classes, Tags, Text } from '../interface/enums';
+import { Classes, Tags, Text, Number } from '../interface/enums';
 import { DataLevels } from '../interface/interface';
 
 export default class Game extends CreateLevel {
     private currentElem: HTMLElement | null = null;
-
     private isPassedLevel = true;
 
     constructor(public data: DataLevels[]) {
@@ -15,20 +13,21 @@ export default class Game extends CreateLevel {
     }
 
     private createFormEditor = (): HTMLFormElement => {
-        this.formEditor.classList.add(Classes.FORM);
-        this.input.classList.add(Classes.FORM_INPUT, Classes.BLINK);
+        this.formEditor = this.createElement(Tags.FORM, [Classes.FORM]) as HTMLFormElement;
+        this.input = this.createElement(Tags.INPUT, [Classes.FORM_INPUT, Classes.BLINK]) as HTMLInputElement;
         this.input.placeholder = Text.PLACEHOLDER;
         this.input.type = 'text';
         this.input.focus();
 
-        const button = document.createElement(Tags.BUTTON);
-        button.classList.add(Classes.FORM_BUTTON);
-        button.type = 'submit';
-        button.append(this.createElement(Tags.SPAN, [Classes.BUTTON_TEXT], Text.ENTER));
-
         this.formEditor.append(
             this.input,
-            button,
+            this.createButton(
+                [Classes.FORM_BUTTON],
+                'submit',
+                () => null,
+                '',
+                this.createElement(Tags.SPAN, [Classes.BUTTON_TEXT], Text.ENTER)
+            ),
             this.createButton([Classes.FORM_HELP], 'button', this.showAnswer, Text.HELP)
         );
 
@@ -99,8 +98,9 @@ export default class Game extends CreateLevel {
             const node = document.querySelector('.tooltip') as HTMLElement;
             node.classList.toggle(Classes.HIDDEN);
             node.innerHTML = tooltipText;
-            node.style.left = `${element.getClientRects()[0].x - 60}px`;
-            node.style.top = `${element.getClientRects()[0].y - 50}px`;
+            const elementClientRects = element.getClientRects()[0];
+            node.style.left = `${elementClientRects.x - 60}px`;
+            node.style.top = `${elementClientRects.y - 50}px`;
         }
     };
 
@@ -128,7 +128,7 @@ export default class Game extends CreateLevel {
     };
 
     private createHtmlCode = (): HTMLDivElement => {
-        this.htmlCode.classList.add(Classes.HTML_CODE);
+        this.htmlCode = this.createElement(Tags.DIV, [Classes.HTML_CODE]) as HTMLDivElement;
         this.htmlCode.append(this.getViewerCode(this.levels[this.levelActive].boardMarkup));
 
         this.htmlCode.addEventListener('mouseover', (e: Event) => {
@@ -147,7 +147,7 @@ export default class Game extends CreateLevel {
     };
 
     private createTable = (): HTMLElement => {
-        this.table.classList.add(Classes.TABLE);
+        this.table = this.createElement(Tags.SECTION, [Classes.TABLE]) as HTMLElement;
         this.table.innerHTML = normalizeHtml(this.levels[this.levelActive].boardMarkup);
         this.table.querySelectorAll('*').forEach((item: Element) => {
             if (item.closest(this.levels[this.levelActive].selector)) {
@@ -170,20 +170,18 @@ export default class Game extends CreateLevel {
     };
 
     private createLineNumber = (): HTMLDivElement => {
-        const lineNumber = document.createElement(Tags.DIV);
-        lineNumber.classList.add(Classes.NUMBERS);
-        for (let i = 0; i < 15; i += 1) {
+        const lineNumber = this.createElement(Tags.DIV, [Classes.NUMBERS]) as HTMLDivElement;
+        for (let i = 0; i < Number.LINE_COUNT; i += 1) {
             lineNumber.innerHTML += `${i + 1}<br>`;
         }
         return lineNumber;
     };
     private createWrapperGame = (): HTMLDivElement => {
-        const container = document.createElement(Tags.DIV);
-        container.classList.add(Classes.GAME);
+        const container = this.createElement(Tags.DIV, [Classes.GAME]) as HTMLDivElement;
         container.append(
             this.createBlock(
                 Tags.DIV,
-                Classes.HEADING_WRAPPER,
+                [Classes.HEADING_WRAPPER],
                 this.createElement(Tags.H2, [Classes.LAYOUT_HEADER], this.levels[this.levelActive].doThis)
             ),
             this.createBlock(
@@ -192,23 +190,33 @@ export default class Game extends CreateLevel {
 
                 this.createBlock(
                     Tags.DIV,
-                    Classes.TABLE_PLANETS,
+                    [Classes.TABLE_PLANETS],
                     this.createBlock(Tags.DIV, [Classes.TABLE_WRAPPER], this.createTable())
                 )
             ),
             this.createBlock(
                 Tags.DIV,
-                Classes.EDITOR_WRAPPER,
+                [Classes.EDITOR_WRAPPER],
                 this.createBlock(
                     Tags.DIV,
                     [Classes.EDITOR],
-                    this.createHeaderElement(Tags.DIV, [Classes.EDITOR], Text.CSS, Text.STYLE),
+                    this.createBlock(
+                        Tags.DIV,
+                        [Classes.EDITOR_HEADER],
+                        this.createElement(Tags.DIV, [Classes.EDITOR_ITEM], Text.CSS),
+                        this.createElement(Tags.DIV, [Classes.EDITOR_ITEM], Text.STYLE)
+                    ),
                     this.createBlock(Tags.DIV, [Classes.EDITOR_MAIN], this.createFormEditor(), this.createLineNumber())
                 ),
                 this.createBlock(
                     Tags.DIV,
                     [Classes.VIEWER],
-                    this.createHeaderElement(Tags.DIV, [Classes.VIEWER], Text.HTML, Text.INDEX),
+                    this.createBlock(
+                        Tags.DIV,
+                        [Classes.VIEWER_HEADER],
+                        this.createElement(Tags.DIV, [Classes.VIEWER_ITEM], Text.HTML),
+                        this.createElement(Tags.DIV, [Classes.VIEWER_ITEM], Text.INDEX)
+                    ),
                     this.createBlock(Tags.DIV, [Classes.VIEWER_MAIN], this.createLineNumber(), this.createHtmlCode())
                 )
             ),
@@ -224,8 +232,7 @@ export default class Game extends CreateLevel {
     };
 
     public initApp = (): void => {
-        const container = document.createElement(Tags.DIV);
-        container.classList.add(Classes.WRAPPER);
+        const container = this.createElement(Tags.DIV, [Classes.WRAPPER]);
         container.append(
             this.createBlockLevel(),
             this.createWrapperGame(),

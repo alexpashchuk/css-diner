@@ -23,10 +23,14 @@ enum Classes {
     RESET = 'reset',
     GAME = 'game',
     EDITOR = 'editor',
+    EDITOR_HEADER = 'editor-header',
+    EDITOR_ITEM = 'editor-item',
     EDITOR_WRAPPER = 'editor-wrapper',
     EDITOR_MAIN = 'editor-main',
     VIEWER = 'viewer',
     VIEWER_MAIN = 'viewer-main',
+    VIEWER_HEADER = 'viewer-header',
+    VIEWER_ITEM = 'viewer-item',
     NUMBERS = 'numbers',
     HTML_CODE = 'html-code',
     LAYOUT = 'layout',
@@ -67,6 +71,7 @@ enum Tags {
     H3 = 'h3',
     DIV = 'div',
     SPAN = 'span',
+    A = 'a',
     P = 'p',
     BUTTON = 'button',
     UL = 'ul',
@@ -99,4 +104,8 @@ enum Text {
     RESULTS = 'Results:',
 }
 
-export { Classes, Tags, Text };
+enum Number {
+    LINE_COUNT = 15,
+}
+
+export { Classes, Tags, Text, Number };
