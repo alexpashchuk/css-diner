@@ -31,7 +31,7 @@ export default class CreateLevel extends ManageLevel {
     };
 
     private createMenuLevel = (): HTMLDivElement => {
-        this.rootMenu = this.createElement(Tags.DIV, [Classes.LEVEL_MENU]) as HTMLDivElement;
+        this.rootMenu = this.createElement(Tags.NAV, [Classes.LEVEL_MENU]) as HTMLDivElement;
         this.listMenu = this.createElement(Tags.UL, [Classes.LEVEL_LIST]) as HTMLUListElement;
 
         for (let i = 0; i < this.levels.length; i += 1) {

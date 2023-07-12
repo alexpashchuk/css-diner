@@ -81,6 +81,7 @@ enum Tags {
     INPUT = 'input',
     SECTION = 'section',
     FOOTER = 'footer',
+    NAV = 'nav',
 }
 
 enum Text {
@@ -104,8 +105,4 @@ enum Text {
     RESULTS = 'Results:',
 }
 
-enum Number {
-    LINE_COUNT = 15,
-}
-
-export { Classes, Tags, Text, Number };
+export { Classes, Tags, Text };

@@ -66,12 +66,9 @@ export default class ManageLevel extends CreateElements {
             if (+item.id === this.levelActive + 1) item.classList.add(Classes.LIST_ACTIVE);
             item.children[0].classList.remove(Classes.NOT_PASSED, Classes.PASSED);
             if (objProgress[i]) {
-                if (objProgress[i].correct && !objProgress[i].incorrect) {
-                    item.children[0].classList.add(Classes.PASSED);
-                }
-                if (objProgress[i].incorrect && !objProgress[i].correct) {
-                    item.children[0].classList.add(Classes.NOT_PASSED);
-                }
+                objProgress[i].correct && !objProgress[i].incorrect
+                    ? item.children[0].classList.add(Classes.PASSED)
+                    : item.children[0].classList.add(Classes.NOT_PASSED);
             }
         });
     };
@@ -184,7 +181,7 @@ export default class ManageLevel extends CreateElements {
         for (let i = 0; i < arrayContainer.length; i += 1) {
             const div = document.createElement('div');
             const child = arrayContainer[i];
-            if (child.children.length > 0) {
+            if (child.children.length) {
                 div.append(`<${child.nodeName.toLocaleLowerCase()}${this.getAttributes(child)}>`);
                 for (let j = 0; j < child.children.length; j += 1) {
                     const elemChild = child.children[j].cloneNode(true);

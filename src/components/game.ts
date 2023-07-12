@@ -1,7 +1,8 @@
 import CreateLevel from './createLevel';
 import { normalizeHtml } from '../utils/utils';
-import { Classes, Tags, Text, Number } from '../interface/enums';
+import { Classes, Tags, Text } from '../interface/enums';
 import { DataLevels } from '../interface/interface';
+import { LINE_COUNT } from './constants';
 
 export default class Game extends CreateLevel {
     private currentElem: HTMLElement | null = null;
@@ -171,7 +172,7 @@ export default class Game extends CreateLevel {
 
     private createLineNumber = (): HTMLDivElement => {
         const lineNumber = this.createElement(Tags.DIV, [Classes.NUMBERS]) as HTMLDivElement;
-        for (let i = 0; i < Number.LINE_COUNT; i += 1) {
+        for (let i = 0; i < LINE_COUNT; i += 1) {
             lineNumber.innerHTML += `${i + 1}<br>`;
         }
         return lineNumber;
